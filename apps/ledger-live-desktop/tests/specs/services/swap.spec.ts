@@ -3,11 +3,44 @@ import { expect } from "@playwright/test";
 import { SwapPage } from "../../models/SwapPage";
 import { DeviceAction } from "../../models/DeviceAction";
 import { Drawer } from "tests/models/Drawer";
+import { AccountsPage } from "tests/models/AccountsPage";
+import { AccountPage } from "tests/models/AccountPage";
+import { Layout } from "tests/models/Layout";
 
-test.use({ userdata: "1AccountBTC1AccountETH" });
+test.use({ userdata: "1AccountBTC1AccountETH", env: { DEV_TOOLS: true } });
+
+process.env.PWDEBUG = "1";
+
+// Tests to cover in Playwright test suite
+// Switch From/To currency
+// Enter specific amount
+// Change network fees
+// Add new account from ‘From’ menu
+// Add new account when ‘To’ account doesn’t exist
+// Filter quotes (centralised, decentralised, etc)
+// Correct fiat currency used
+// Navigate to
+// Errors:
+// ‘Insufficient funds’
+// Amount too low for providers ‘Amount must be at least …’
 
 test.describe.parallel("Swap", () => {
-  test("Swap with Centralised Exchange", async ({ page }) => {
+  test("Add accounts via Swap page", async ({ page }) => {
+    const layout = new Layout(page);
+    const accountsPage = new AccountsPage(page);
+    const accountPage = new AccountPage(page);
+    const swapPage = new SwapPage(page);
+
+    await test.step("Navigate to swap via account page", async () => {
+      await page.pause();
+      await layout.goToAccounts();
+      await accountsPage.navigateToAccountByName("Ethereum 2");
+      await accountPage.navigateToSwap();
+      await expect.soft(page).toHaveScreenshot("open-swap-page-with-eth-account-selected.png");
+    });
+  });
+
+  test("Full Swap with Centralised Exchange", async ({ page }) => {
     const swapPage = new SwapPage(page);
     const deviceAction = new DeviceAction(page);
     const drawer = new Drawer(page);

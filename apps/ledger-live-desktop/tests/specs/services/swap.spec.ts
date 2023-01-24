@@ -32,11 +32,24 @@ test.describe.parallel("Swap", () => {
     const swapPage = new SwapPage(page);
 
     await test.step("Navigate to swap via account page", async () => {
-      await page.pause();
       await layout.goToAccounts();
       await accountsPage.navigateToAccountByName("Ethereum 2");
       await accountPage.navigateToSwap();
       await expect.soft(page).toHaveScreenshot("open-swap-page-with-eth-account-selected.png");
+    });
+
+    await test.step("Start account add flow from Source (From) currency", async () => {
+      // await page.pause();
+      await swapPage.openFromAccountDropdown();
+      await expect.soft(page).toHaveScreenshot("from-account-dropdown.png");
+    });
+
+    await test.step("Start account add flow from Destination (To) currency", async () => {
+      // await page.pause();
+      // await layout.goToAccounts();
+      // await accountsPage.navigateToAccountByName("Ethereum 2");
+      // await accountPage.navigateToSwap();
+      // await expect.soft(page).toHaveScreenshot("open-swap-page-with-eth-account-selected.png");
     });
   });
 

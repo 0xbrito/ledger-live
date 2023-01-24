@@ -5,6 +5,7 @@ export class SwapPage {
   readonly page: Page;
   readonly swapMenuButton: Locator;
   readonly maxSpendableToggle: Locator;
+  readonly fromAccountDropdown: Locator;
   readonly exchangeButton: Locator;
   readonly swapId: Locator;
   readonly seeDetailsButton: Locator;
@@ -19,6 +20,7 @@ export class SwapPage {
     this.page = page;
     this.swapMenuButton = page.locator("data-test-id=drawer-swap-button");
     this.maxSpendableToggle = page.locator("data-test-id=swap-max-spendable-toggle");
+    this.fromAccountDropdown = page.locator("data-test-id=from-currency-select-account-dropdown");
     this.exchangeButton = page.locator("data-test-id=exchange-button");
     this.swapId = page.locator("data-test-id=swap-id");
     this.seeDetailsButton = page.locator('button:has-text("See details")');
@@ -43,6 +45,10 @@ export class SwapPage {
 
   async sendMax() {
     await this.maxSpendableToggle.click();
+  }
+
+  async openFromAccountDropdown() {
+    await this.fromAccountDropdown.click();
   }
 
   async openTargetAccountDrawer() {
